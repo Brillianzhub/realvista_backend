@@ -1,41 +1,164 @@
-from django.utils.http import urlsafe_base64_decode
-from django.shortcuts import redirect
-from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
-from django.shortcuts import render
-from django.conf import settings
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
+from django.http import JsonResponse
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.contrib.auth.hashers import make_password
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from .serializers import UserSerializer
+from .models import User
+import json
+from django.contrib.auth import logout
+from notifications.models import Device
 
-User = get_user_model()
 
-
+@csrf_exempt
 def register_user(request):
-    # Assume this is a POST request and email, password are sent as POST data
-    email = request.POST['email']
-    password = request.POST['password']
-    user = User.objects.create_user(email=email, password=password)
-    user.is_active = False  # Deactivate until email is verified
-    user.save()
-    send_verification_email(user)
-    return render(request, 'registration/confirmation.html')
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            name = data.get('name')
+            email = data.get('email')
+            password = data.get('password')
+            auth_provider = data.get('auth_provider', 'email')
+
+            if not name or not email or not password:
+                return JsonResponse({'error': 'All fields are required.'}, status=400)
+
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({'error': 'User with this email already exists.'}, status=400)
+
+            user = User(
+                name=name,
+                email=email,
+                auth_provider=auth_provider
+            )
+
+            if auth_provider == 'email':
+                user.password = make_password(password)
+
+            user.save()
+
+            return JsonResponse({
+                'id': user.id,
+                'name': user.name,
+                'email': user.email,
+            }, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'Failed to sign up: {str(e)}'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
-def send_verification_email(user):
-    uid = urlsafe_base64_encode(force_bytes(user.pk))
-    verification_url = f"{settings.DOMAIN}{reverse('verify_email')}?uid={uid}"
-    subject = 'Verify your email address'
-    message = f'Click the link to verify your email: {verification_url}'
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+@csrf_exempt
+def login_view(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            email = data.get('email')
+            password = data.get('password')
+            device_token = data.get('device_token')
+
+            try:
+                user = User.objects.get(
+                    email=email, auth_provider='email')
+            except User.DoesNotExist:
+                return JsonResponse({'error': 'Invalid email or password'}, status=400)
+
+            if user.check_password(password):
+                if device_token:
+                    device, created = Device.objects.update_or_create(
+                        token=device_token,
+                        defaults={'user': user}
+                    )
+
+                return JsonResponse({
+                    'id': user.id,
+                    'name': user.name,
+                    'email': user.email,
+                    'auth_provider': user.auth_provider,
+                }, status=200)
+            else:
+                return JsonResponse({'error': 'Invalid email or password'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
-def verify_email(request):
-    uid = request.GET.get('uid')
-    user_id = urlsafe_base64_decode(uid).decode()
-    user = User.objects.get(pk=user_id)
-    if user:
-        user.is_active = True
-        user.save()
-        return redirect('login')  # or a success page
-    return render(request, 'registration/invalid_verification.html')
+@csrf_exempt
+def google_sign_in(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            google_id = data.get('google_id')
+            email = data.get('email')
+            name = data.get('name')
+            profile_picture = data.get('profile_picture')
+            device_token = data.get('device_token')
+
+            if not google_id or not email or not name:
+                return JsonResponse({'error': 'Missing required Google user data.'}, status=400)
+
+            # Check if user already exists
+            user = User.objects.filter(email=email).first()
+
+            if user:
+                # Update existing user’s Google ID and profile picture if they exist but don't have it set
+                if not user.google_id:
+                    user.google_id = google_id
+                if not user.profile_picture:
+                    user.profile_picture = profile_picture
+                user.save()
+
+            else:
+                # Create a new user
+                user = User.objects.create(
+                    google_id=google_id,
+                    email=email,
+                    name=name,
+                    profile_picture=profile_picture,
+                    auth_provider='google'
+                )
+
+            if device_token:
+                Device.objects.update_or_create(
+                    token=device_token,
+                    defaults={'user': user}
+                )
+
+            return JsonResponse({
+                'id': user.id,
+                'name': user.name,
+                'email': user.email,
+                'profile_picture': user.profile_picture
+            }, status=200)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
+
+@csrf_exempt
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return JsonResponse({'message': 'Logged out successfully'}, status=200)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=200)
+
+
+# @login_required
+# def current_user(request):
+#     user = request.user
+#     return JsonResponse({
+#         'id': user.id,
+#         'name': user.name,
+#         'email': user.email,
+#     })
