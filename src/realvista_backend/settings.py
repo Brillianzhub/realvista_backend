@@ -8,14 +8,9 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -38,6 +33,7 @@ INSTALLED_APPS = [
     'notifications',
     'portfolio',
     'projects',
+    'order',
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -124,7 +120,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/Brillianzhub/realvista_backend/static'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -140,10 +139,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'brillianzhub@gmail.com'
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-EMAIL_HOST_PASSWORD = 'your-email-password'
 
 MANAGERS = (
-    ("Team Brillianz Hub", "brillianzhub@gmail.com"),
+    ("Team Realvista GmbH", "brillianzhub@gmail.com"),
 )
 
 ADMIN = MANAGERS

@@ -1,3 +1,5 @@
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets
 from django.http import JsonResponse
@@ -154,11 +156,21 @@ def logout_view(request):
         return JsonResponse({'error': 'Invalid request method'}, status=200)
 
 
-# @login_required
-# def current_user(request):
-#     user = request.user
-#     return JsonResponse({
-#         'id': user.id,
-#         'name': user.name,
-#         'email': user.email,
-#     })
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_current_user(request):
+
+    user = request.user if request.user.is_authenticated else None
+    if not user:
+        return Response({"detail": "User not authenticated"}, status=401)
+
+    user_data = {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "auth_provider": user.auth_provider,
+        "is_active": user.is_active,
+        "is_staff": user.is_staff,
+        "date_joined": user.date_joined,
+    }
+    return Response(user_data)
