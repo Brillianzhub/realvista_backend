@@ -24,7 +24,7 @@ def send_invoice_email(user_email, project_name, total_amount, user_name):
         subject = f"Invoice for Your Interest in the Project: {project_name}"
         message = (
             f"Dear {user_name},\n\n"
-            "Thank you for your interest in our project, {project_name}. We are delighted to assist you in completing your payment process.\n\n"
+            f"Thank you for your interest in our project, f'{project_name}'. We are delighted to assist you in completing your payment process.\n\n"
             "Please find attached a PDF invoice with all the necessary payment details. Kindly download and print the invoice for your records. "
             "You can proceed to make the payment via bank transfer using the details provided in the invoice.\n\n"
             "Note: Payments made through bank transfer may take up to two working days for verification.\n\n"
