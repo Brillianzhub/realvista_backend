@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'portfolio',
     'projects',
     'order',
+    'dividend',
 
     'rest_framework',
     'rest_framework.authtoken',

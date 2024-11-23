@@ -8,4 +8,5 @@ urlpatterns = [
     path('portfolio/', include('portfolio.urls')),
     path('projects/', include('projects.urls')),
     path('order/', include('order.urls')),
+    path('dividends/', include('dividend.urls'))
 ]
