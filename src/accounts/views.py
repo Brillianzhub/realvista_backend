@@ -150,9 +150,8 @@ def resend_token(request):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             verification_url = f"{request.scheme}://{request.get_host()}/accounts/verify-email/{uid}/{token}/"
 
-
             UserToken.objects.update_or_create(
-                user=user, 
+                user=user,
                 defaults={"token": token},
             )
 
