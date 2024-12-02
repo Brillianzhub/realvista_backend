@@ -1,6 +1,9 @@
+from .views import CreateDividendAPIView, UserDividendsAPIView
 from django.urls import path
-from .views import CreateDividendAPIView
+
 
 urlpatterns = [
-    path('user-dividends/', CreateDividendAPIView.as_view(), name='create-dividend'),
+    path('create-dividend/', CreateDividendAPIView.as_view(), name='create-dividend'),
+    path('user-dividends/', UserDividendsAPIView.as_view(),
+         name='user-dividends'),
 ]

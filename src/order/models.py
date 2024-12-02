@@ -21,9 +21,9 @@ class Order(models.Model):
     ]
 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='orders')
+        User, on_delete=models.CASCADE, related_name='user_orders')
     project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, related_name='orders')
+        Project, on_delete=models.CASCADE, related_name='propject_orders')
     quantity = models.PositiveIntegerField()
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_status = models.CharField(

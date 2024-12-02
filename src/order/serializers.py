@@ -12,3 +12,13 @@ class OrderSerializer(serializers.ModelSerializer):
             'id', 'quantity', 'project', 'total_amount',
             'payment_status', 'order_reference', 'created_at', 'updated_at'
         ]
+
+    def validate(self, data):
+        project = data['project']
+        quantity = data['quantity']
+
+        if quantity > project.available_slots:
+            raise serializers.ValidationError(
+                f"Only {project.available_slots} slots are available for project {project.name}."
+            )
+        return data

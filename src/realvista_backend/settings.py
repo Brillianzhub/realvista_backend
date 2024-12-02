@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'projects',
     'order',
     'dividend',
+    'holdings',
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -135,14 +136,17 @@ SITE_ID = 1
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'brillianzhub@gmail.com'
+EMAIL_HOST = 'realvistaproperties.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = 'contact@realvistaproperties.com'
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = 'contact@realvistaproperties.com'
+
 
 MANAGERS = (
-    ("Team Realvista GmbH", "brillianzhub@gmail.com"),
+    ("Team Realvista GmbH", "contact@realvistaproperties.com"),
 )
 
 ADMIN = MANAGERS

@@ -1,3 +1,6 @@
+from django.db import transaction
+from projects.models import Project
+from order.models import Order
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from io import BytesIO
@@ -123,3 +126,39 @@ def send_invoice_email(user_name, user_email, project_name, quantity, cost_per_s
         return {"success": True, "message": "Invoice sent successfully."}
     except Exception as e:
         return {"success": False, "error": str(e)}
+
+
+def place_order(user, project, quantity, total_amount):
+    with transaction.atomic():
+
+        ordered_slots = project.ordered_slots or 0
+        available_slots = project.num_slots - ordered_slots
+
+        if quantity > available_slots:
+            raise ValueError(
+                f"Only {available_slots} slots available for project {project.name}"
+            )
+
+        order, created = Order.objects.get_or_create(
+            user=user,
+            project=project,
+            quantity=quantity,
+            total_amount=total_amount
+        )
+
+        if not created:
+            available_slots += order.quantity
+
+        if quantity > available_slots:
+            raise ValueError(
+                f"Only {available_slots} slots available for project {project.name}"
+            )
+
+        order.quantity = quantity
+        order.total_amount = total_amount
+        order.save()
+
+        project.ordered_slots = project.num_slots - available_slots + quantity
+        project.save()
+
+        return order

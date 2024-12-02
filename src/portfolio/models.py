@@ -6,6 +6,7 @@ from geopy.distance import geodesic
 
 
 class Property(models.Model):
+
     PROPERTY_TYPE_CHOICES = [
         ('land', 'Land'),
         ('building', 'Building'),
@@ -13,14 +14,28 @@ class Property(models.Model):
         ('residential', 'Residential Property'),
     ]
 
+    STATUS_CHOICES = [
+        ('available', 'Available'),
+        ('occupied', 'Occupied'),
+        ('under_maintenance', 'Under Maintenance'),
+    ]
+
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='properties')
+    address = models.CharField(max_length=255)
     location = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=20)
     property_type = models.CharField(
         max_length=50, choices=PROPERTY_TYPE_CHOICES)
+    num_units = models.IntegerField()
     initial_cost = models.DecimalField(max_digits=15, decimal_places=2)
     current_value = models.DecimalField(max_digits=15, decimal_places=2)
+    rental_income = models.DecimalField(max_digits=10, decimal_places=2)
+    expenses = models.DecimalField(max_digits=10, decimal_places=2)
+    photos = models.ImageField(
+        upload_to='property_photos/', blank=True, null=True)
+    virtual_tour_url = models.URLField(blank=True, null=True)
     area_sqm = models.FloatField(null=True, blank=True)
     added_on = models.DateTimeField(auto_now_add=True)
 

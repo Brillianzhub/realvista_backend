@@ -6,13 +6,15 @@ from projects.models import Project
 class Dividend(models.Model):
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name='dividends')
-    month = models.DateField(null=False, blank=False)
-
+    month = models.DateField(null=True, blank=True)
     total_return = models.DecimalField(
         max_digits=12, decimal_places=2)
     total_expenses = models.DecimalField(
         max_digits=12, decimal_places=2, default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.project.name} - {self.month.strftime('%B, %Y')}"
 
     def calculate_user_shares(self):
 
@@ -27,11 +29,12 @@ class Dividend(models.Model):
             return []
 
         user_shares = []
-        retention_percentage = 1.00
+        retention_percentage = 1.50
 
         for order in orders:
             user_share = (order.quantity / total_slots) * net_return
-            final_share = user_share * (1 - (retention_percentage / 100))
+            final_share = user_share * \
+                (1 - (float(retention_percentage) / 100))
 
             user_shares.append({
                 "user": order.user,
@@ -71,3 +74,6 @@ class DividendShare(models.Model):
         self.final_share_amount = self.share_amount * \
             (1 - (self.retention_percentage / 100))
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.user.email

@@ -44,6 +44,7 @@ class Project(models.Model):
     cost_per_slot = models.DecimalField(
         max_digits=10, decimal_places=2)
     num_slots = models.PositiveIntegerField(blank=True, null=True)
+    ordered_slots = models.PositiveIntegerField(default=0)
     location = models.CharField(max_length=255)
     type_of_project = models.CharField(max_length=20, choices=PROJECT_TYPES)
     status = models.CharField(
@@ -58,6 +59,10 @@ class Project(models.Model):
     @property
     def total_cost(self):
         return self.num_slots * self.cost_per_slot
+
+    @property
+    def available_slots(self):
+        return self.num_slots - self.ordered_slots
 
 
 @receiver(pre_save, sender=Project)

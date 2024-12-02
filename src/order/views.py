@@ -1,18 +1,15 @@
 from rest_framework.decorators import action
 from rest_framework import viewsets
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import OrderSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from .models import Order
 from accounts.models import User
 from projects.models import Project
-
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from realvista_backend.utility import send_invoice_email
+from holdings.models import Holding
 
 
 @csrf_exempt
@@ -76,6 +73,35 @@ def send_email_view(request):
 
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def update_payment_status(request):
+    if request.method == 'POST':
+        try:
+            payload = json.loads(request.body)
+            order_id = payload.get('order_id')
+            if not order_id:
+                return JsonResponse({'error': 'Order ID is required'}, status=400)
+
+            order = Order.objects.get(id=order_id)
+            order.payment_status = 'paid'
+            order.save()
+
+            Holding.objects.create(
+                user=order.user,
+                project=order.project,
+                slots=order.quantity,
+                amount=order.total_amount
+            )
+
+            return JsonResponse({'message': 'Payment status updated succesfully'}, status=200)
+        except Order.DoesNotExist:
+            return JsonResponse({'error': 'Order not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
