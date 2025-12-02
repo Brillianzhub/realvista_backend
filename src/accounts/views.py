@@ -51,7 +51,6 @@ from enterprise.models import CorporateEntityMember
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from jose import jwt
 
 
 def generate_verification_code():
