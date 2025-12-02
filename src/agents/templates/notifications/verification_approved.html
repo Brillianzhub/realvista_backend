@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Identity Verification Approved</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: left;
+        }
+
+        .footer {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #333;
+            max-width: 600px;
+            margin: auto;
+            border-top: 0.5px solid #ddd;
+        }
+
+        .footer a {
+            color: #358B8B;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            border: 0.1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .company-summary {
+            text-align: left;
+        }
+
+        .features {
+            text-align: left;
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% include "base/logo.html" %}
+
+        <h2>Dear {{ user.name }},</h2>
+
+        <p>Congratulations! Your identity verification has been <strong>approved</strong>.</p>
+        <p>You can now access all features available to verified agents on Realvista.</p>
+
+        <br>
+        <p>Thank you,<br><strong>Realvista Team</strong></p>
+
+        {% include "base/footer.html" %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Action Required: Verify Your Realvista Agent Account</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .content {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #2a5b7b;
+            font-size: 24px;
+            margin-top: 0;
+        }
+
+        h2 {
+            color: #2a5b7b;
+            font-size: 20px;
+            margin-top: 25px;
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #2a5b7b;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+            font-size: 12px;
+            color: #777777;
+            text-align: center;
+        }
+
+        .highlight-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #2a5b7b;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% include "base/logo.html" %}
+        <div class="content">
+            <h1>Welcome to Realvista Properties, {{ user.first_name }}!</h1>
+
+            <p>We're delighted to welcome you to Nigeria's premier platform connecting professional real estate agents
+                with serious property seekers.</p>
+
+            <div class="highlight-box">
+                <h2>Complete Your Verification</h2>
+                <p>To activate your agent account and access all platform features, please verify your identity by
+                    uploading:</p>
+                <ul>
+                    <li><strong>Government-issued ID:</strong> Clear copy of your Driver's License, International
+                        Passport, NIN, or Voter's Card</li>
+                    <li><strong>Recent selfie:</strong> A clear photo of yourself holding your ID (both face and ID
+                        details visible)</li>
+                    <li><strong>Business registration (if applicable):</strong> CAC certificate for agencies/business
+                        accounts</li>
+                </ul>
+            </div>
+
+            <p>Verification helps us maintain a trusted community and unlocks these benefits for you:</p>
+            <ul>
+                <li>Priority listing in agent search results</li>
+                <li>Verified badge to build client trust</li>
+                <li>Full access to premium features</li>
+            </ul>
+
+            <center>
+                <a href="https://www.realvistaproperties.com/dashboard/verification" class="button">Complete
+                    Verification Now</a>
+            </center>
+
+            <p>Need help? Our support team is available at <a
+                    href="mailto:support@realvistaproperties.com">support@realvistaproperties.com</a> or +234 XXX XXX
+                XXXX.</p>
+
+            <p>Welcome to the Realvista community!</p>
+            <p><strong>The Realvista Team</strong></p>
+        </div>
+
+        {% include "base/footer.html" %}
+    </div>
+</body>
+
+</html>

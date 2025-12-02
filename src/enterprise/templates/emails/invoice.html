@@ -1,0 +1,99 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order Cancellation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: left;
+        }
+
+        .footer {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #333;
+            max-width: 600px;
+            margin: auto;
+            border-top: 0.5px solid #ddd;
+        }
+
+        .footer a {
+            color: #358B8B;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            border: 0.1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .company-summary {
+            text-align: left;
+        }
+
+        .features {
+            text-align: left;
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% include "base/logo.html" %}
+
+        <h3>Dear {{ user_name }},</h3>
+
+        <p>Thank you for choosing Realvista! We acknowledge your request for slot allocation for the property  
+            <strong>{{ property }}</strong> with the mutual fund group <strong>{{ group_name }}</strong>.  
+            Your request will be reviewed and confirmed by your group admin. You will receive a confirmation once approved.  
+        </p>
+        <h2>Booking Details:</h2>
+        <ul>
+            <li><strong>Booking Reference:</strong> {{ booking_reference }}</li>
+            <li><strong>Property Address:</strong> {{ property_address }}</li>
+            <li><strong>Number of Slots:</strong> {{ quantity }}</li>
+            <li><strong>Cost per Slot:</strong> {{currency}} {{ cost_per_slot|floatformat:2|intcomma }}</li>
+            <li><strong>Total Amount:</strong> {{currency}} {{ total_amount|floatformat:2|intcomma }}</li>
+        </ul>
+        <p>Please proceed to make your payment into the group account as agreed. You have two days to make your payment
+            or
+            cancel your booking. Any payment not confirmed within two days will result in the automatic cancellation of
+            the
+            booking, and the slots will be made available to other users.</p>
+
+        <p>If you need to make any changes to your booking or have any questions, please don’t hesitate to contact your
+            group administrator.</p>
+
+        <p><strong>Important Note:</strong> Please note that each mutual fund group is independently managed by the
+            group
+            members. RealVista is not liable for any misuse or mismanagement of group funds. We advise you to make every
+            necessary inquiry about the group and the investments before making any investment decision.</p>
+
+        <p>If you need further assistance, please contact <a
+                href="mailto:contact@realvistaproperties.com">contact@realvistaproperties.com</a>.</p>
+
+        <p>Thank you,<br><strong>Realvista Team</strong></p>
+
+        {% include "base/footer.html" %}
+    </div>
+</body>
+
+</html>

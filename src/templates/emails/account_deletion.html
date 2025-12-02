@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Account Deletion Request Received</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: left;
+        }
+
+        .footer {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #333;
+            max-width: 600px;
+            margin: auto;
+            border-top: 0.5px solid #ddd;
+        }
+
+        .footer a {
+            color: #358B8B;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            border: 0.1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% include "base/logo.html" %}
+        <h2>Account Deletion Request Received</h2>
+        <p>Dear {{ first_name }},</p>
+        <p>We have received your request to delete your account. This process will take 3 months to complete.</p>
+        <p>You will still have access to your account until then, but we highly recommend that you delete any saved documents, as they will not be recoverable after deletion.</p>
+        <p>If you change your mind within this period, please contact us.</p>
+        <p>Thank you,<br><strong>Realvista Team</strong></p>
+        {% include "base/footer.html" %}
+    </div>
+</body>
+
+</html>

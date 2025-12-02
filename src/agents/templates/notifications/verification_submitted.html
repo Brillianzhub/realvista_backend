@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verification Documents Received</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            text-align: left;
+        }
+
+        .footer {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #333;
+            max-width: 600px;
+            margin: auto;
+            border-top: 0.5px solid #ddd;
+        }
+
+        .footer a {
+            color: #358B8B;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            border: 0.1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        .company-summary {
+            text-align: left;
+        }
+
+        .features {
+            text-align: left;
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% include "base/logo.html" %}
+
+        <h2>Dear {{ user.name }},</h2>
+
+        <p>We have received your identity verification documents successfully.</p>
+        <p>Our team will review your submission and provide feedback within the next <strong>24 hours</strong>.</p>
+        <p>Thank you for your cooperation and for taking this important step toward becoming a verified agent on
+            Realvista.</p>
+
+        <br>
+        <p>Warm regards,<br><strong>Realvista Team</strong></p>
+
+        {% include "base/footer.html" %}
+    </div>
+</body>
+
+</html>
